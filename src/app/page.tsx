@@ -14,21 +14,26 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#252525] to-[#161616] text-white">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
           <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-            Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
+            Jersey City <span className="text-[hsl(33,93%,52%)]">Bitcoin</span>
           </h1>
+          <p className="text-2xl text-white/80">
+            Jersey City Bitcoin is a decentralized community for those interested 
+            in meeting up to discuss, and learn more about bitcoin in the Jersey City, NJ area.
+             You can be well versed or new, all are welcome.
+          </p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
             <Link
               className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
               href="https://create.t3.gg/en/usage/first-steps"
               target="_blank"
             >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
+              <h3 className="text-2xl font-bold">Meetup →</h3>
               <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
+                We host a monthy meetup in Jersey City to discuss Bitcoin
+                and connect with fellow Bitcoiners! All are welcome.
               </div>
             </Link>
             <Link
@@ -36,10 +41,11 @@ export default async function Home() {
               href="https://create.t3.gg/en/introduction"
               target="_blank"
             >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
+              <h3 className="text-2xl font-bold">Learn →</h3>
               <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
+                Explore our resources to deepen your understanding of Bitcoin
+                and Lightning. Whether you're a beginner or an expert, there's
+                always something new to learn!
               </div>
             </Link>
           </div>
