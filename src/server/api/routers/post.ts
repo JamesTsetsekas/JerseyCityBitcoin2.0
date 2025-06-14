@@ -16,11 +16,16 @@ export const postRouter = createTRPCRouter({
     }),
 
   create: protectedProcedure
-    .input(z.object({ name: z.string().min(1) }))
+    .input(z.object({ 
+      name: z.string().min(1),
+      body: z.string().min(1) 
+    }))
     .mutation(async ({ ctx, input }) => {
+      // Make sure to include all fields
       return ctx.db.post.create({
         data: {
           name: input.name,
+          body: input.body,
           createdBy: { connect: { id: ctx.session.user.id } },
         },
       });
@@ -33,6 +38,20 @@ export const postRouter = createTRPCRouter({
     });
 
     return post ?? null;
+  }),
+
+  getAllPosts: publicProcedure.query(async ({ ctx }) => {
+    return ctx.db.post.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        createdBy: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
+      },
+    });
   }),
 
   getSecretMessage: protectedProcedure.query(() => {

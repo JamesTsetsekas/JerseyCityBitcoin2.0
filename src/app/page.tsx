@@ -43,7 +43,7 @@ export default async function Home() {
               </div>
             </Link>
           </div>
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-2 mb-8">
             <p className="text-2xl text-white">
               {hello ? hello.greeting : "Loading tRPC query..."}
             </p>
@@ -69,7 +69,7 @@ export default async function Home() {
             </div>
           </div>
 
-          {session?.user && <LatestPost />}
+          <LatestPost />
         </div>
       </main>
     </HydrateClient>
