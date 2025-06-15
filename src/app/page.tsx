@@ -49,7 +49,7 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className="w-full mt-0 pl-8 pr-8">
+          <div className="w-full max-w-3xl mt-0 flex justify-center pl-12 pr-12">
             <Link
               className="flex flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
               href="/community"

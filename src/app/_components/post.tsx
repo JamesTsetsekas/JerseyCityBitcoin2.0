@@ -70,16 +70,6 @@ export function LatestPost() {
   
   // Get upload mutation outside of the function
   const generateUploadUrl = api.upload.generatePresignedUrl.useMutation();
-
-  // S3 access check query
-  const s3AccessCheck = api.upload.verifyS3Access.useQuery(undefined, {
-    onSuccess: (data) => {
-      console.log("S3 access check result:", data);
-    },
-    onError: (error) => {
-      console.error("S3 access check error:", error);
-    }
-  });
   
   // Server-side upload mutation
   const serverUpload = api.upload.uploadFile.useMutation();
@@ -512,72 +502,6 @@ export function LatestPost() {
               {createPost.isPending ? "Posting..." : "Post"}
             </button>
           </form>
-        </div>
-      )}
-
-      {/* Debug info for S3 connection - development only */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mt-8 p-4 bg-black/30 rounded-lg">
-          <h3 className="text-xl font-semibold mb-2">S3 Debug Info</h3>
-          <div className="text-sm">
-            <p>S3 Access: {s3AccessCheck.isLoading ? 'Checking...' : 
-              s3AccessCheck.isError ? `Error: ${s3AccessCheck.error.message}` :
-              s3AccessCheck.data?.success ? '✅ Connected' : `❌ Error: ${s3AccessCheck.data?.message}`}
-            </p>
-            {s3AccessCheck.data && (
-              <p className="mt-1 text-gray-400">{s3AccessCheck.data.message}</p>
-            )}
-            <button
-              onClick={async () => {
-                try {
-                  // Create a small test image file (1x1 pixel transparent PNG)
-                  const base64Image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
-                  const binaryString = atob(base64Image);
-                  const bytes = new Uint8Array(binaryString.length);
-                  for (let i = 0; i < binaryString.length; i++) {
-                    bytes[i] = binaryString.charCodeAt(i);
-                  }
-                  const testFile = new File([bytes], "test-image.png", { type: "image/png" });
-                  
-                  // Try uploading the image
-                  const imageUrl = await handleServerUpload(testFile, false);
-                  
-                  // Create a div to show the URL and preview the image
-                  const previewContainer = document.createElement('div');
-                  previewContainer.style.marginTop = '10px';
-                  previewContainer.style.padding = '10px';
-                  previewContainer.style.backgroundColor = '#1a1a1a';
-                  previewContainer.style.borderRadius = '4px';
-                  
-                  // Add the URL (word-wrapped)
-                  const urlText = document.createElement('p');
-                  urlText.style.wordBreak = 'break-all';
-                  urlText.style.marginBottom = '10px';
-                  urlText.style.fontSize = '12px';
-                  urlText.textContent = `Presigned URL: ${imageUrl}`;
-                  previewContainer.appendChild(urlText);
-                  
-                  // Add the image preview
-                  const imgPreview = document.createElement('img');
-                  imgPreview.src = imageUrl;
-                  imgPreview.style.maxWidth = '100%';
-                  imgPreview.style.border = '1px solid #333';
-                  previewContainer.appendChild(imgPreview);
-                  
-                  // Find the debug div and append our preview
-                  document.querySelector('.mt-8.p-4.bg-black\\/30')?.appendChild(previewContainer);
-                  
-                  alert("Test image upload succeeded! Check preview below.");
-                } catch (error) {
-                  console.error("Test upload failed:", error);
-                  alert("Test upload failed. Check console for details.");
-                }
-              }}
-              className="mt-2 px-3 py-1 bg-blue-600 rounded-md text-white hover:bg-blue-700"
-            >
-              Test Image Upload
-            </button>
-          </div>
         </div>
       )}
     </div>
