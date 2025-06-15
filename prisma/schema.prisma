@@ -18,13 +18,51 @@ model Post {
     id        Int      @id @default(autoincrement())
     name      String
     body      String
+    photoUrl  String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
+    
+    replies    Reply[]
+    reactions  Reaction[]
 
     @@index([name])
+}
+
+model Reply {
+    id        Int      @id @default(autoincrement())
+    content   String
+    photoUrl  String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    post       Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId     Int
+    
+    createdBy  User    @relation(fields: [createdById], references: [id])
+    createdById String
+    
+    reactions  Reaction[]
+}
+
+model Reaction {
+    id        Int      @id @default(autoincrement())
+    type      String   // e.g., 'LIKE', 'LOVE', 'LAUGH', etc.
+    createdAt DateTime @default(now())
+    
+    post       Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId     Int?
+    
+    reply      Reply?  @relation(fields: [replyId], references: [id], onDelete: Cascade)
+    replyId    Int?
+    
+    createdBy  User    @relation(fields: [createdById], references: [id])
+    createdById String
+    
+    @@unique([createdById, postId, type])
+    @@unique([createdById, replyId, type])
 }
 
 // Necessary for Next auth
@@ -65,6 +103,8 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    replies       Reply[]
+    reactions     Reaction[]
 }
 
 model VerificationToken {
